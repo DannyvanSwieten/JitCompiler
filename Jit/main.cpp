@@ -15,6 +15,7 @@ int main(int argc, const char * argv[])
     
     vm.push(rbp);
     vm.pop(rbp);
+    vm.move(<#Register op1#>, <#Register op2#>)
     vm.returnToMain();
     vm.print();
     

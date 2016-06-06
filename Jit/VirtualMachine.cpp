@@ -173,6 +173,17 @@ void VirtualMachine::add(Register op1, OneByteDisplacement op2)
     codeBuffer.insert(codeBuffer.end(), {byte1, byte2, byte3});
 }
 
+void VirtualMachine::increment(Register reg)
+{
+    Opcode instruction = incinstr;
+    instruction[0]  = reg[0];
+    instruction[1]  = reg[1];
+    instruction[2]  = reg[2];
+    
+    unsigned char hex = instruction.to_ulong();
+    codeBuffer.emplace_back(hex);
+}
+
 void VirtualMachine::move(Register op1, Register op2)
 {
     

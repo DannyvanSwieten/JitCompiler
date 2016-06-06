@@ -43,6 +43,8 @@ static const Opcode moveinstr   = Opcode("10001000");
 static const Opcode pushinstr   = Opcode("01010000");
 static const Opcode popinstr    = Opcode("01011000");
 
+static const Opcode incinstr    = Opcode("01000000");
+
 class VirtualMachine
 {
 public:
@@ -84,6 +86,10 @@ public:
     void add(Register op1, OneByteDisplacement op2);
         //! Add the value of whatever is at a memory location specified by a 4 byte displacement into a register.
     void add(Register op1, FourByteDisplacement op2);
+    
+    // Increment instructions
+    //! Increments whatever value is currently in this register.
+    void increment(Register reg);
     
     //! Returns to main returning whatever is in eax register.
     void returnToMain();
