@@ -22,6 +22,15 @@ void VirtualMachine::print()
     }
 }
 
+void VirtualMachine::printHex()
+{
+    for(auto& code: codeBuffer)
+    {
+        Opcode binary = code;
+        std::cout << std::hex << (unsigned short)binary.to_ulong() << std::endl;
+    }
+}
+
 VirtualMachine::Page::Page():
 pageSize(sysconf(_SC_PAGESIZE))
 {
@@ -110,7 +119,7 @@ void VirtualMachine::add(Register op1, Register op2)
     codeBuffer.insert(codeBuffer.end(), {firstByte, secondByte});
 }
 
-void VirtualMachine::addImmediate(Register op1, int32_t op2)
+void VirtualMachine::add(Register op1, int32_t op2)
 {
     Opcode add;
     add[6]  = 0; // Immediate value has same size as operand.
@@ -182,6 +191,47 @@ void VirtualMachine::increment(Register reg)
     
     unsigned char hex = instruction.to_ulong();
     codeBuffer.emplace_back(hex);
+}
+
+void VirtualMachine::move(Register reg, int32_t value)
+{
+    if(stackPointer <= 255)
+    {
+        stackPointer -= 4;
+        move(reg, value, (OneByteDisplacement) stackPointer);
+    }
+    else
+    {
+        stackPointer -= 32;
+        move(reg, value, (FourByteDisplacement) stackPointer);
+    }
+}
+
+void VirtualMachine::move(int32_t value)
+{
+    move(rbp, value);
+}
+
+void VirtualMachine::move(Register reg, int32_t value, OneByteDisplacement displacement)
+{
+    unsigned char byte1 = 0xC7;
+    unsigned char byte2 = 0x45;
+    unsigned char byte3 = displacement;
+    unsigned char byte4 = nibble(value, 0);
+    unsigned char byte5 = nibble(value, 1);
+    unsigned char byte6 = nibble(value, 2);
+    unsigned char byte7 = nibble(value, 3);
+    
+    codeBuffer.insert(codeBuffer.end(),
+                      {
+                          byte1,
+                          byte2,
+                          byte3,
+                          byte4,
+                          byte5,
+                          byte6,
+                          byte7
+                      });
 }
 
 void VirtualMachine::move(Register op1, Register op2)

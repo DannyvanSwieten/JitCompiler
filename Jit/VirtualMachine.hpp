@@ -81,7 +81,7 @@ public:
     //! add from register to a register.
     void add(Register op1, Register op2);
     //! Add an immediate value into a register.
-    void addImmediate(Register op1, int32_t op2);
+    void add(Register op1, int32_t op2);
     //! Add the value of whatever is at a memory location specified by a 1 byte displacement into a register.
     void add(Register op1, OneByteDisplacement op2);
         //! Add the value of whatever is at a memory location specified by a 4 byte displacement into a register.
@@ -98,15 +98,28 @@ public:
     //! Moves whatever value is at a register to another register.
     void move(Register op1, Register op2);
     
+    //! Moves an immediate value to a register.
+    void move(Register reg, int32_t value);
+    
+    //! Moves an immediate value to stack.
+    void move(int32_t value);
+    
     //! Compiles the code and returns a function.
     std::function<int(void)> compile();
     
     void print();
+    void printHex();
+    
+private:
+    
+    void move(Register reg, int32_t value, OneByteDisplacement displacement);
+//    void move(Register reg, int32_t value, FourByteDisplacement displacement);
     
 private:
     
     Page page;
     std::vector<unsigned char> codeBuffer;
+    uint8_t stackPointer = 256;
 };
 
 #endif /* VirtualMachine_hpp */

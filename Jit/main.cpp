@@ -14,9 +14,18 @@ int main(int argc, const char * argv[])
     VirtualMachine vm;
     
     vm.push(rbp);
+    vm.move(1);
     vm.pop(rbp);
     vm.returnToMain();
-    vm.print();
+    
+    /*
+     Print the complete machine code in hex. Compare this to assembly: (should match)
+     push   rbp
+     mov    DWORD PTR [rbp-0x4],0x1
+     pop    rbp
+     ret
+     */
+    vm.printHex();
     
     auto f = vm.compile();
     std::cout << f() << std::endl;
