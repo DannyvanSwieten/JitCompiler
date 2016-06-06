@@ -41,11 +41,13 @@ static const Opcode subinstr    = Opcode("00101000");
 static const Opcode moveinstr   = Opcode("10001000");
 
 static const Opcode pushinstr   = Opcode("01010000");
+static const Opcode popinstr    = Opcode("01011000");
 
 class VirtualMachine
 {
 public:
     
+    //! This is a memory page mapped for execution.
     class Page
     {
     public:
@@ -53,7 +55,8 @@ public:
         Page();
         ~Page();
         
-        void map(std::vector<unsigned char>& buffer);
+        //! This maps a codebuffer to memory and binds it for execution wrapping it in a std::function object.
+        std::function<int(void)> map(std::vector<unsigned char>& buffer);
         
     private:
         
@@ -63,20 +66,34 @@ public:
         int flags = MAP_ANONYMOUS | MAP_PRIVATE;
     };
     
+    //! start encoding instructions. Performs some checks for code validity.
     void startEncoding();
     
-    // Push
+    // Push instructions
+    //! Push a register.
     void push(Register reg = rbp);
+    //! Pop a register.
+    void pop(Register reg = rbp);
     
-    // Add
+    // Add instructions
+    //! add from register to a register.
     void add(Register op1, Register op2);
+    //! Add an immediate value into a register.
     void addImmediate(Register op1, int32_t op2);
+    //! Add the value of whatever is at a memory location specified by a 1 byte displacement into a register.
     void add(Register op1, OneByteDisplacement op2);
+        //! Add the value of whatever is at a memory location specified by a 4 byte displacement into a register.
     void add(Register op1, FourByteDisplacement op2);
     
-    // Move
+    //! Returns to main returning whatever is in eax register.
+    void returnToMain();
+    
+    // Move instructions
+    //! Moves whatever value is at a register to another register.
     void move(Register op1, Register op2);
-    void run();
+    
+    //! Compiles the code and returns a function.
+    std::function<int(void)> compile();
     
     void print();
     

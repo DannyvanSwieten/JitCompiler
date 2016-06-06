@@ -13,11 +13,13 @@ int main(int argc, const char * argv[])
 {
     VirtualMachine vm;
     
-    vm.push();
-//    vm.addImmediate(rcx, 10);
-    vm.add(rax, rcx);
+    vm.push(rbp);
+    vm.pop(rbp);
+    vm.returnToMain();
     vm.print();
-//    vm.move(rcx, rax);
+    
+    auto f = vm.compile();
+    std::cout << f() << std::endl;
     
     return 0;
 }

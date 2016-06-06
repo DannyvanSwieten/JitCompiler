@@ -33,12 +33,28 @@ VirtualMachine::Page::~Page()
     munmap(raw, pageSize);
 }
 
-void VirtualMachine::Page::map(std::vector<unsigned char>& buffer)
+std::function<int(void)> VirtualMachine::compile()
+{
+    return page.map(codeBuffer);
+}
+
+std::function<int(void)> VirtualMachine::Page::map(std::vector<unsigned char>& buffer)
 {
     memcpy(raw, buffer.data(), buffer.size());
     
     int prot = PROT_READ | PROT_EXEC;
     mprotect(raw, pageSize, prot);
+    
+    typedef int (*fptr)();
+    
+    fptr my_fptr = reinterpret_cast<fptr>(raw) ;
+    std::function<int(void)> f = my_fptr;
+    return f;
+}
+
+void VirtualMachine::returnToMain()
+{
+    codeBuffer.emplace_back(0xc3);
 }
 
 void VirtualMachine::push(Register reg)
@@ -50,7 +66,18 @@ void VirtualMachine::push(Register reg)
     
     // Single byte instruction.
     
-    unsigned char hex     = instruction.to_ulong();
+    unsigned char hex   = instruction.to_ulong();
+    codeBuffer.emplace_back(hex);
+}
+
+void VirtualMachine::pop(Register reg)
+{
+    Opcode instruction = popinstr;
+    instruction[0] = reg[0];
+    instruction[1] = reg[1];
+    instruction[2] = reg[2];
+    
+    unsigned char hex = instruction.to_ulong();
     codeBuffer.emplace_back(hex);
 }
 

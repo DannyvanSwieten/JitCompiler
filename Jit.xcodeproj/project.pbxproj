@@ -8,7 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		FA1596F01CDD0BA6006F3128 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FA1596EF1CDD0BA6006F3128 /* main.cpp */; };
-		FA6C32451CE368EC00481F98 /* VirtualMachine.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FA6C32431CE368EC00481F98 /* VirtualMachine.cpp */; };
+		FA7FC0CC1D06117F007C68AA /* VirtualMachine.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FA6C32431CE368EC00481F98 /* VirtualMachine.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -124,7 +124,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				FA1596F01CDD0BA6006F3128 /* main.cpp in Sources */,
-				FA6C32451CE368EC00481F98 /* VirtualMachine.cpp in Sources */,
+				FA7FC0CC1D06117F007C68AA /* VirtualMachine.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -213,6 +213,8 @@
 		FA1596F41CDD0BA6006F3128 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_CXX_LIBRARY = "libc++";
+				GCC_C_LANGUAGE_STANDARD = gnu11;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Debug;
@@ -220,6 +222,8 @@
 		FA1596F51CDD0BA6006F3128 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_CXX_LIBRARY = "libc++";
+				GCC_C_LANGUAGE_STANDARD = gnu11;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Release;
