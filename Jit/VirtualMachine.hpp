@@ -100,9 +100,6 @@ public:
 private:
     
     Page page;
-    size_t pageSize = 0;
-    int32_t stackPointer;
-    
     std::vector<unsigned char> codeBuffer;
 };
 
