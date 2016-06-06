@@ -1,0 +1,5 @@
+mov - 48 89
+add - 48 01
+%rdi - 89
+%rax - f8
+retq - c3
